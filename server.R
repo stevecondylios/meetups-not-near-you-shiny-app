@@ -38,6 +38,10 @@ server <- function(input, output) {
         this_week %>%
           mutate(available_links = mapply(c, find_us, zoom_links, meet_links, youtube_links, facebook_links)) %>%
           mutate(available_links = map_chr(available_links, ~ paste0(.x, collapse= ", ") )) %>%
+          
+          # "POSIXct" "POSIXt" display as unix epoch time if not converted to character first
+          mutate(your_local_time = as.character(your_local_time)) %>% 
+          
           select(group, name, desc_clean, available_links, your_local_time, link) %>%
           arrange(your_local_time)
 
